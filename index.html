@@ -347,7 +347,7 @@
       min-height: 320px;
       display: flex;
       flex-direction: row;
-      align-items: stretch;
+      align-items: center;
       gap: 36px;
     }
 
@@ -360,20 +360,24 @@
     }
 
     .hero-photo-wrap {
-      width: 220px;
+      width: 240px;
+      aspect-ratio: 1 / 1;
       flex-shrink: 0;
-      border-radius: 16px;
+      border-radius: 20px;
       overflow: hidden;
       border: 1px solid var(--border2);
       position: relative;
       background: var(--bg3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .hero-photo-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center top;
+      object-position: center 10%;
       display: block;
       filter: grayscale(6%);
       opacity: .88;
@@ -408,14 +412,16 @@
       }
 
       .hero-photo-wrap {
-        width: 100%;
-        height: 140px;
-        border-radius: 12px;
-        order: -1; /* show photo above text, but small */
+        width: min(100%, 260px);
+        aspect-ratio: 1 / 1;
+        height: auto;
+        margin: 0 auto 24px;
+        border-radius: 20px;
+        order: -1;
       }
 
       .hero-photo-wrap img {
-        object-position: center 20%; /* show face not ceiling */
+        object-position: center 10%;
       }
     }
 
@@ -1141,10 +1147,7 @@
       transform: none
     }
 
-    /* ── LETTER SCRAMBLE ── */
-    .scramble {
-      display: inline
-    }
+
 
     /* ── RESPONSIVE ── */
     @media(max-width:700px) {
@@ -1347,8 +1350,7 @@
       </div>
       <!-- Right: photo -->
       <div class="hero-photo-wrap">
-        <img src="public/WhatsApp Image 2026-05-03 at 17.39.37.jpeg" alt="Nilesh Kanti"
-          onerror="this.style.opacity=0" />
+        <img src="public/Screenshot 2026-05-10 at 22.14.12.png" alt="Nilesh Kanti" onerror="this.style.opacity=0" />
         <div class="hero-photo-caption">nilesh kanti · chennai 2026</div>
       </div>
     </div>
@@ -1468,6 +1470,21 @@
     <div id="exp" class="card c-exp fi">
       <div class="sec-title">experience</div>
       <div class="tl">
+        <div class="ti">
+          <div class="tp">May 2025<br />Oct 2025</div>
+          <div>
+            <div class="tr">Software Engineering Intern (Google Summer of Code Contributor)</div>
+            <div class="to">OpenMRS — Open-source Healthcare Technology Platform</div>
+            <ul class="tpts">
+              <li>Contributed to healthcare technology projects under the Google Summer of Code ecosystem using Java,
+                Maven, Git, and the OpenMRS SDK, collaborating with a global open-source community on feature
+                development, debugging, and issue resolution.</li>
+              <li>Worked on backend and healthcare interoperability components involving MySQL, Hibernate, Docker, and
+                FHIR integrations while actively participating in remote agile workflows, community discussions, and
+                open-source contribution practices.</li>
+            </ul>
+          </div>
+        </div>
         <div class="ti">
           <div class="tp">Oct 2024<br />Aug 2025</div>
           <div>
@@ -1679,22 +1696,6 @@
     }
     setTimeout(typeStep, 900);
 
-    /* ── LETTER SCRAMBLE on hover ── */
-    const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    function scrambleEl(el) {
-      const orig = el.textContent; let frame = 0;
-      const id = setInterval(() => {
-        el.textContent = orig.split('').map((c, i) => {
-          if (c === ' ') return ' ';
-          if (frame > i * 1.5) return orig[i];
-          return CHARS[Math.floor(Math.random() * CHARS.length)];
-        }).join('');
-        if (frame++ >= orig.length * 2) clearInterval(id);
-      }, 38);
-    }
-    document.querySelectorAll('.pn,.tr,.edu-degree').forEach(el => {
-      el.addEventListener('mouseenter', () => scrambleEl(el));
-    });
 
     /* ── SCATTER PARTICLES ── */
     (function () {
