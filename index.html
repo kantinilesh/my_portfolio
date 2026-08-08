@@ -19,14 +19,13 @@
       padding: 0
     }
 
-    /* smooth scroll */
     html {
       scroll-behavior: smooth;
       scroll-padding-top: 60px
     }
 
-    /* custom tilted cursor */
-    * {
+    /* custom cursor — disabled automatically for touch + reduced-motion users */
+    .no-native-cursor * {
       cursor: none !important
     }
 
@@ -41,6 +40,12 @@
       transition: transform .12s ease, width .15s, height .15s, border-color .15s, background .15s;
       border-radius: 2px;
       will-change: transform, left, top;
+      display: none;
+    }
+
+    .no-native-cursor #cursor,
+    .no-native-cursor #cursor-dot {
+      display: block;
     }
 
     #cursor.hover {
@@ -61,6 +66,7 @@
       background: var(--accent);
       transform: translate(-50%, -50%);
       transition: opacity .2s;
+      display: none;
     }
 
     /* ── THEME ── */
@@ -85,29 +91,33 @@
       --tag-bg: rgba(200, 169, 110, 0.09);
       --tag-c: #c8a96e;
       --tag-b: rgba(200, 169, 110, 0.18);
+      --on-accent: #14150f;
     }
 
     [data-theme="light"] {
-      --bg: #faf8f2;
-      --bg2: #f3f0e8;
-      --bg3: #ece8dc;
-      --card: #f6f3eb;
-      --card2: #f0ece0;
-      --glass: rgba(255, 255, 255, 0.6);
-      --glass-b: rgba(255, 255, 255, 0.85);
-      --neu-s1: rgba(255, 255, 255, 0.9);
-      --neu-s2: rgba(160, 150, 120, 0.35);
-      --border: rgba(0, 0, 0, 0.07);
-      --border2: rgba(0, 0, 0, 0.13);
-      --text: #4a4535;
-      --muted: #9a9080;
-      --white: #1e1c14;
+      /* warm "paper on a desk" light mode — cards sit clearly above the page,
+         instead of nearly matching it, so the bento layout keeps its depth. */
+      --bg: #f1ebdc;
+      --bg2: #e9e1cd;
+      --bg3: #e2d8bf;
+      --card: #fffdf6;
+      --card2: #faf5e8;
+      --glass: rgba(255, 255, 255, 0.55);
+      --glass-b: rgba(255, 255, 255, 0.9);
+      --neu-s1: rgba(255, 255, 255, 0.95);
+      --neu-s2: rgba(94, 74, 30, 0.16);
+      --border: rgba(66, 50, 20, 0.11);
+      --border2: rgba(66, 50, 20, 0.2);
+      --text: #3d3826;
+      --muted: #8c8267;
+      --white: #211d10;
       --accent: #8a6c2e;
       --accent2: #a07c38;
-      --green: #4a7c3f;
-      --tag-bg: rgba(138, 108, 46, 0.08);
-      --tag-c: #8a6c2e;
-      --tag-b: rgba(138, 108, 46, 0.18);
+      --green: #3f7a35;
+      --tag-bg: rgba(138, 108, 46, 0.1);
+      --tag-c: #77591f;
+      --tag-b: rgba(138, 108, 46, 0.22);
+      --on-accent: #fffaf0;
     }
 
     body {
@@ -247,22 +257,25 @@
       background: var(--tag-bg)
     }
 
-    /* ── MARQUEE ── */
+    /* ── LOGO MARQUEE ── */
     .marquee-wrap {
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
       overflow: hidden;
-      padding: 10px 0;
+      padding: 14px 0;
       background: var(--bg2);
       position: relative;
       z-index: 1;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
     }
 
     .marquee-track {
       display: flex;
+      align-items: center;
       gap: 0;
       width: max-content;
-      animation: marquee 28s linear infinite;
+      animation: marquee 32s linear infinite;
     }
 
     .marquee-wrap:hover .marquee-track {
@@ -270,20 +283,31 @@
     }
 
     .marquee-item {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      letter-spacing: .08em;
-      color: var(--muted);
-      padding: 0 32px;
-      white-space: nowrap;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      padding: 0 26px;
+      white-space: nowrap;
+      border-right: 1px solid var(--border);
     }
 
-    .marquee-item .sep {
-      color: var(--accent);
-      font-size: 14px
+    .marquee-item img {
+      width: 18px;
+      height: 18px;
+      opacity: .75;
+      filter: grayscale(15%);
+      transition: opacity .15s;
+    }
+
+    .marquee-item:hover img {
+      opacity: 1;
+    }
+
+    .marquee-item span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: .05em;
+      color: var(--muted);
     }
 
     @keyframes marquee {
@@ -425,6 +449,14 @@
       }
     }
 
+    .hero-labels {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
     .hero-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
@@ -434,7 +466,6 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 22px;
     }
 
     .hero-label::before {
@@ -454,6 +485,8 @@
       border-radius: 99px;
       color: var(--green);
       font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: .03em;
     }
 
     .live-badge::before {
@@ -464,6 +497,20 @@
       background: var(--green);
       animation: ndotpulse 2s ease-in-out infinite;
       transform: none
+    }
+
+    .visa-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-b);
+      padding: 2px 9px;
+      border-radius: 99px;
+      color: var(--accent);
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: .03em;
     }
 
     h1 {
@@ -518,7 +565,7 @@
 
     .btn.primary {
       background: var(--accent);
-      color: var(--bg);
+      color: var(--on-accent);
       border-color: var(--accent);
       box-shadow: 0 0 22px rgba(200, 169, 110, .22);
     }
@@ -529,8 +576,6 @@
       box-shadow: 0 0 30px rgba(200, 169, 110, .38)
     }
 
-
-
     /* ── STATS ROW ── */
     .stats-row {
       display: grid;
@@ -538,20 +583,12 @@
       gap: 14px;
     }
 
-    /* ── STAT ── */
     .c-stat {
       padding: 22px 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       min-height: 110px;
-    }
-
-    .c-s1,
-    .c-s2,
-    .c-s3,
-    .c-s4 {
-      /* handled by stats-row grid */
     }
 
     .stat-val {
@@ -561,12 +598,16 @@
       color: var(--white);
       line-height: 1;
       letter-spacing: -.03em;
+      display: flex;
+      align-items: center;
+      gap: 7px;
     }
 
-    .stat-val span {
-      font-size: 13px;
+    .stat-val svg {
+      width: 18px;
+      height: 18px;
       color: var(--accent);
-      margin-left: 2px
+      flex-shrink: 0;
     }
 
     .stat-label {
@@ -686,7 +727,6 @@
       transition: transform .28s cubic-bezier(.34, 1.56, .64, 1), box-shadow .28s, border-color .28s;
     }
 
-    /* puzzle irregular spans */
     .gitem:nth-child(1) {
       grid-column: 1/3;
       grid-row: 1/2
@@ -755,31 +795,6 @@
 
     .gitem:hover .gitem-label {
       opacity: 1
-    }
-
-    /* placeholder when no image */
-    .gitem-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .gitem-placeholder .icon {
-      font-size: 24px;
-      opacity: .25
-    }
-
-    .gitem-placeholder .hint {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px;
-      color: var(--muted);
-      letter-spacing: .06em;
-      text-align: center;
-      padding: 0 12px
     }
 
     /* ── EXPERIENCE ── */
@@ -1147,8 +1162,6 @@
       transform: none
     }
 
-
-
     /* ── RESPONSIVE ── */
     @media(max-width:700px) {
       .bento {
@@ -1189,14 +1202,12 @@
         grid-template-columns: 1fr 1fr
       }
 
-      /* Gallery: 2-column compact grid on phone */
       .gallery-grid {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 160px 160px 160px;
         gap: 8px;
       }
 
-      /* Reset all irregular spans — equal cells on mobile */
       .gitem:nth-child(1),
       .gitem:nth-child(2),
       .gitem:nth-child(3),
@@ -1206,12 +1217,10 @@
         grid-row: span 1;
       }
 
-      /* slot 5 spans both columns at bottom */
       .gitem:nth-child(5) {
         grid-column: span 2;
       }
 
-      /* Ensure images never overflow their slot */
       .gitem {
         height: 160px;
         overflow: hidden;
@@ -1233,9 +1242,7 @@
         font-size: 22px
       }
 
-      .hero-label {
-        font-size: 9px;
-        flex-wrap: wrap;
+      .hero-labels {
         margin-bottom: 14px;
       }
     }
@@ -1249,7 +1256,6 @@
         grid-template-columns: 1fr;
       }
 
-      /* Single column gallery on very small phones */
       .gallery-grid {
         grid-template-columns: 1fr;
         grid-template-rows: repeat(5, 170px);
@@ -1267,12 +1273,30 @@
         overflow: hidden;
       }
     }
+
+    /* Respect reduced motion: pause marquee + fade-ins render immediately */
+    @media (prefers-reduced-motion: reduce) {
+      .marquee-track {
+        animation: none;
+      }
+
+      .fi {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      .ndot,
+      .live-badge::before {
+        animation: none;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Custom cursor -->
+  <!-- Custom cursor (JS enables this only on precise-pointer, non-reduced-motion devices) -->
   <div id="cursor"></div>
   <div id="cursor-dot"></div>
 
@@ -1295,29 +1319,10 @@
     </div>
   </nav>
 
-  <!-- MARQUEE -->
-  <div class="marquee-wrap" style="margin-top:52px">
+  <!-- LOGO MARQUEE — tech stack as icons, name shown on hover/tooltip -->
+  <div class="marquee-wrap" style="margin-top:52px" aria-label="Tech stack">
     <div class="marquee-track" id="marquee">
-      <span class="marquee-item">Backend Engineering <span class="sep">◆</span></span>
-      <span class="marquee-item">Machine Learning <span class="sep">◆</span></span>
-      <span class="marquee-item">Cloud Infrastructure <span class="sep">◆</span></span>
-      <span class="marquee-item">Spring Boot <span class="sep">◆</span></span>
-      <span class="marquee-item">FastAPI <span class="sep">◆</span></span>
-      <span class="marquee-item">AWS · Azure · Docker <span class="sep">◆</span></span>
-      <span class="marquee-item">LangChain · RAG <span class="sep">◆</span></span>
-      <span class="marquee-item">LSTM · XGBoost <span class="sep">◆</span></span>
-      <span class="marquee-item">SRMIST Chennai <span class="sep">◆</span></span>
-      <span class="marquee-item">Open to Opportunities <span class="sep">◆</span></span>
-      <span class="marquee-item">Backend Engineering <span class="sep">◆</span></span>
-      <span class="marquee-item">Machine Learning <span class="sep">◆</span></span>
-      <span class="marquee-item">Cloud Infrastructure <span class="sep">◆</span></span>
-      <span class="marquee-item">Spring Boot <span class="sep">◆</span></span>
-      <span class="marquee-item">FastAPI <span class="sep">◆</span></span>
-      <span class="marquee-item">AWS · Azure · Docker <span class="sep">◆</span></span>
-      <span class="marquee-item">LangChain · RAG <span class="sep">◆</span></span>
-      <span class="marquee-item">LSTM · XGBoost <span class="sep">◆</span></span>
-      <span class="marquee-item">SRMIST Chennai <span class="sep">◆</span></span>
-      <span class="marquee-item">Open to Opportunities <span class="sep">◆</span></span>
+      <!-- icons render twice back-to-back for a seamless loop; kept in one JS-generated block below -->
     </div>
   </div>
 
@@ -1329,9 +1334,10 @@
       <!-- Left: text content -->
       <div class="hero-content">
         <div>
-          <div class="hero-label">
-            Software Engineer
+          <div class="hero-labels">
+            <div class="hero-label">Software Engineer</div>
             <span class="live-badge">open to opportunities</span>
+            <span class="visa-badge">open to relocation · UK · EU · India</span>
           </div>
           <h1>Hi, I'm <em>Nilesh</em>.<br /><span id="typed-line"></span><span id="typed-cursor"
               style="color:var(--accent);animation:ndotpulse 1s step-end infinite;font-weight:300">|</span></h1>
@@ -1358,16 +1364,19 @@
     <!-- STATS -->
     <div class="stats-row">
       <div class="card c-stat c-s1 fi">
-        <div class="stat-val">50×<span>live</span></div>
-        <div class="stat-label">Projects</div>
+        <div class="stat-val">50+</div>
+        <div class="stat-label">projects shipped</div>
       </div>
       <div class="card c-stat c-s2 fi">
-        <div class="stat-val">200+<span>+</span></div>
-        <div class="stat-label">leetcode problems</div>
+        <div class="stat-val">200+</div>
+        <div class="stat-label">leetcode solved</div>
       </div>
       <div class="card c-stat c-s3 fi">
-        <div class="stat-val" style="font-size:20px">🏆 7<span>+</span></div>
-        <div class="stat-label">Hackathons won</div>
+        <div class="stat-val">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 3M17 5h3a3 3 0 0 1-3 3"/></svg>
+          7+
+        </div>
+        <div class="stat-label">hackathons won</div>
       </div>
       <div class="card c-stat c-s4 fi">
         <div class="stat-val">2027</div>
@@ -1432,31 +1441,26 @@
       <div class="sec-title">moments & achievements</div>
       <div class="gallery-grid">
 
-        <!-- Slot 1 — wide left -->
         <div class="gitem">
           <img src="public/NILESH KANTI PARERA_Award (1).jpeg" alt="Codefest 2025 · Runner-up" />
           <div class="gitem-label">Codefest 2025 · Runner-up</div>
         </div>
 
-        <!-- Slot 2 -->
         <div class="gitem">
           <img src="public/84d21a24-5353-4176-9b54-7f1482db4952.png" alt="NIT GenAI Hackathon · Winner 2025" />
           <div class="gitem-label">NIT GenAI Hackathon · Winner 2025</div>
         </div>
 
-        <!-- Slot 3 — tall right -->
         <div class="gitem">
           <img src="public/WhatsApp Image 2026-05-03 at 17.39.37 (1).jpeg" alt="Scaler OpenEnv Hackathon · Bengaluru" />
           <div class="gitem-label">Scaler OpenEnv Hackathon · Bengaluru</div>
         </div>
 
-        <!-- Slot 4 -->
         <div class="gitem">
           <img src="public/1742899702218.jpeg" alt="CAD 3.0 · Certificate of Appreciation" />
           <div class="gitem-label">CAD 3.0 · Certificate of Appreciation</div>
         </div>
 
-        <!-- Slot 5 — wide bottom -->
         <div class="gitem">
           <img src="public/WhatsApp Image 2026-05-03 at 17.39.37 2.jpeg" alt="Hackathon Moments · 2025" />
           <div class="gitem-label">Hackathon Moments · 2025</div>
@@ -1464,7 +1468,6 @@
 
       </div>
     </div>
-
 
     <!-- EXPERIENCE -->
     <div id="exp" class="card c-exp fi">
@@ -1505,9 +1508,9 @@
             <div class="tr">Data / Software Intern</div>
             <div class="to">SRM Technologies · Chennai, India</div>
             <ul class="tpts">
-              <li>Built Power BI dashboards tracking 20+ KPIs → 25% improvement in onboarding completion rates.</li>
-              <li>Automated ETL pipelines for 100K+ records/day, cutting manual reporting time by ~40%.</li>
-              <li>Findings translated into product fixes reducing support issues by 30%.</li>
+              <li>Built Power BI dashboards tracking 20+ KPIs, contributing to a measured improvement in onboarding completion rates.</li>
+              <li>Automated ETL pipelines handling 100K+ records/day, cutting manual reporting time significantly.</li>
+              <li>Findings translated into product fixes that reduced recurring support issues.</li>
             </ul>
           </div>
         </div>
@@ -1518,7 +1521,7 @@
             <div class="to">Indian Oil Corporation (IOCL) · Eastern Region</div>
             <ul class="tpts">
               <li>Built Digital Shift Handover System replacing error-prone manual processes in marketing division.</li>
-              <li>Random Forest + anomaly detection at 85% accuracy vs. 60% manual baseline.</li>
+              <li>Random Forest + anomaly detection model, benchmarked against manual baseline.</li>
               <li>Time-series analysis on shift data to flag recurring bottlenecks proactively.</li>
             </ul>
           </div>
@@ -1535,7 +1538,7 @@
           <div class="ptag">Healthcare Appointment Microservice</div>
           <p class="pdesc">Production-deployed RESTful microservice on AWS EC2. Concurrent notification dispatcher
             (ExecutorService + BlockingQueue) processing 500+ notifications/min. MySQL composite indexing cut API
-            response from ~200ms to ~120ms.</p>
+            response time roughly in half.</p>
           <div class="pstack"><span class="ptag2">Java</span><span class="ptag2">Spring Boot</span><span
               class="ptag2">MySQL</span><span class="ptag2">Docker</span><span class="ptag2">AWS EC2</span></div>
         </div>
@@ -1551,8 +1554,8 @@
         <div class="pi">
           <div class="ph"><span class="pn">InvenX</span><span class="pd">Feb 2025</span></div>
           <div class="ptag">Business Forecasting & Optimization</div>
-          <p class="pdesc">LSTM + XGBoost ensemble on 10K+ SKUs — 18% forecast accuracy gain. Real-time dashboards
-            reduced projected logistics costs by 12% through scenario-based analysis.</p>
+          <p class="pdesc">LSTM + XGBoost ensemble on 10K+ SKUs, improving forecast accuracy over the prior baseline.
+            Real-time dashboards for scenario-based logistics cost analysis.</p>
           <div class="pstack"><span class="ptag2">Python</span><span class="ptag2">LSTM</span><span
               class="ptag2">XGBoost</span><span class="ptag2">Next.js</span><span class="ptag2">Chart.js</span></div>
         </div>
@@ -1565,7 +1568,7 @@
       <div class="ach-list">
         <div class="ai">
           <div class="am">2025</div>
-          <div class="at"><strong>🏆 Winner</strong> — National GenAI Hackathon, NIT Andhra Pradesh · 500+ teams
+          <div class="at"><strong>Winner</strong> — National GenAI Hackathon, NIT Andhra Pradesh · 500+ teams
             nationwide</div>
         </div>
         <div class="ai">
@@ -1659,20 +1662,67 @@
   </footer>
 
   <script>
-    /* ── CURSOR ── */
-    const cur = document.getElementById('cursor');
-    const dot = document.getElementById('cursor-dot');
-    let mx = 0, my = 0, cx = 0, cy = 0;
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx + 'px'; dot.style.top = my + 'px' });
-    (function animCur() {
-      cx += (mx - cx) * .18; cy += (my - cy) * .18;
-      cur.style.left = cx + 'px'; cur.style.top = cy + 'px';
-      requestAnimationFrame(animCur);
-    })();
-    document.querySelectorAll('a,button,.tag,.gitem,.pi,.btn,.ci,.card').forEach(el => {
-      el.addEventListener('mouseenter', () => cur.classList.add('hover'));
-      el.addEventListener('mouseleave', () => cur.classList.remove('hover'));
-    });
+    /* ── LOGO MARQUEE ── icons via Simple Icons CDN, with text fallback if an icon fails to load */
+    const stack = [
+      { name: 'Java', slug: 'openjdk' },
+      { name: 'Python', slug: 'python' },
+      { name: 'Spring Boot', slug: 'springboot' },
+      { name: 'FastAPI', slug: 'fastapi' },
+      { name: 'AWS', slug: 'amazonaws' },
+      { name: 'Azure', slug: 'microsoftazure' },
+      { name: 'Docker', slug: 'docker' },
+      { name: 'LangChain', slug: 'langchain' },
+      { name: 'MySQL', slug: 'mysql' },
+      { name: 'PostgreSQL', slug: 'postgresql' },
+      { name: 'Git', slug: 'git' },
+      { name: 'Postman', slug: 'postman' },
+    ];
+    const marquee = document.getElementById('marquee');
+    function buildMarqueeSet() {
+      const frag = document.createDocumentFragment();
+      stack.forEach(t => {
+        const item = document.createElement('span');
+        item.className = 'marquee-item';
+        item.title = t.name;
+        const img = document.createElement('img');
+        img.src = `https://cdn.simpleicons.org/${t.slug}/c8a96e`;
+        img.alt = t.name;
+        img.loading = 'lazy';
+        img.onerror = function () {
+          // fall back to the plain name if the icon CDN can't resolve a slug
+          this.remove();
+          const label = document.createElement('span');
+          label.textContent = t.name;
+          item.prepend(label);
+        };
+        item.appendChild(img);
+        frag.appendChild(item);
+      });
+      return frag;
+    }
+    // duplicate the set once so the CSS animation loops seamlessly
+    marquee.appendChild(buildMarqueeSet());
+    marquee.appendChild(buildMarqueeSet());
+
+    /* ── CUSTOM CURSOR ── only for devices with a precise pointer and no reduced-motion preference */
+    const wantsCustomCursor = window.matchMedia('(pointer: fine)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (wantsCustomCursor) {
+      document.documentElement.classList.add('no-native-cursor');
+      const cur = document.getElementById('cursor');
+      const dot = document.getElementById('cursor-dot');
+      let mx = 0, my = 0, cx = 0, cy = 0;
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx + 'px'; dot.style.top = my + 'px' });
+      (function animCur() {
+        cx += (mx - cx) * .18; cy += (my - cy) * .18;
+        cur.style.left = cx + 'px'; cur.style.top = cy + 'px';
+        requestAnimationFrame(animCur);
+      })();
+      document.querySelectorAll('a,button,.tag,.gitem,.pi,.btn,.ci,.card').forEach(el => {
+        el.addEventListener('mouseenter', () => cur.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cur.classList.remove('hover'));
+      });
+    }
 
     /* ── THEME TOGGLE ── */
     const themeBtn = document.getElementById('themeBtn');
@@ -1685,52 +1735,21 @@
     });
 
     /* ── TYPEWRITER ── */
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const phrases = ['I build things that scale.', 'Backend engineer.', 'ML pipeline builder.', 'Cloud infrastructure nerd.', 'Problem solver.'];
-    let pi = 0, ci = 0, del = false;
     const typedEl = document.getElementById('typed-line');
-    function typeStep() {
-      const p = phrases[pi];
-      if (!del) { typedEl.textContent = p.slice(0, ++ci); if (ci === p.length) { del = true; setTimeout(typeStep, 1800); return } }
-      else { typedEl.textContent = p.slice(0, --ci); if (ci === 0) { del = false; pi = (pi + 1) % phrases.length } }
-      setTimeout(typeStep, del ? 38 : 82);
+    if (reduceMotion) {
+      typedEl.textContent = phrases[0];
+    } else {
+      let pi = 0, ci = 0, del = false;
+      function typeStep() {
+        const p = phrases[pi];
+        if (!del) { typedEl.textContent = p.slice(0, ++ci); if (ci === p.length) { del = true; setTimeout(typeStep, 1800); return } }
+        else { typedEl.textContent = p.slice(0, --ci); if (ci === 0) { del = false; pi = (pi + 1) % phrases.length } }
+        setTimeout(typeStep, del ? 38 : 82);
+      }
+      setTimeout(typeStep, 900);
     }
-    setTimeout(typeStep, 900);
-
-
-    /* ── SCATTER PARTICLES ── */
-    (function () {
-      const canvas = document.getElementById('pCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      let W, H, pts;
-      function init() {
-        W = canvas.offsetWidth; H = canvas.offsetHeight;
-        canvas.width = W; canvas.height = H;
-        const N = Math.max(Math.floor(W * H / 2000), 20);
-        pts = Array.from({ length: N }, () => ({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.5 + .3, vx: (Math.random() - .5) * .38, vy: (Math.random() - .5) * .38, a: Math.random() * .4 + .07, da: (Math.random() - .5) * .004 }));
-      }
-      function frame() {
-        ctx.clearRect(0, 0, W, H);
-        const dark = root.dataset.theme === 'dark';
-        const dc = dark ? '255,255,255' : '60,50,40';
-        for (let i = 0; i < pts.length; i++) {
-          for (let j = i + 1; j < pts.length; j++) {
-            const a = pts[i], b = pts[j], dx = a.x - b.x, dy = a.y - b.y, d = Math.sqrt(dx * dx + dy * dy);
-            if (d < 65) { ctx.beginPath(); ctx.strokeStyle = `rgba(${dc},${.055 * (1 - d / 65)})`; ctx.lineWidth = .35; ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke() }
-          }
-        }
-        for (const p of pts) {
-          p.a += p.da; if (p.a > .52 || p.a < .05) p.da *= -1;
-          p.x += p.vx; p.y += p.vy;
-          if (p.x < 0) { p.x = 0; p.vx *= -1 } if (p.x > W) { p.x = W; p.vx *= -1 }
-          if (p.y < 0) { p.y = 0; p.vy *= -1 } if (p.y > H) { p.y = H; p.vy *= -1 }
-          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = `rgba(${dc},${p.a})`; ctx.fill();
-        }
-        requestAnimationFrame(frame);
-      }
-      init(); frame();
-      window.addEventListener('resize', init);
-    })();
 
     /* ── STAGGERED FADE IN ── */
     const faders = document.querySelectorAll('.fi');
@@ -1751,10 +1770,9 @@
     });
 
     /* ── GALLERY hover tilt (desktop only) ── */
-    const isTouchDevice = () => window.matchMedia('(hover: none)').matches;
     document.querySelectorAll('.gitem').forEach(el => {
       el.addEventListener('mousemove', e => {
-        if (isTouchDevice()) return;
+        if (!wantsCustomCursor) return;
         const r = el.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width - .5;
         const y = (e.clientY - r.top) / r.height - .5;
